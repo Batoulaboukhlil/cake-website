@@ -1,0 +1,810 @@
+<div class="min-h-screen flex flex-col bg-stone-50 text-stone-800 font-sans" dir="ltr">
+
+  <!-- Top Switch Bar: Customer View vs Admin View -->
+  <div class="bg-stone-900 text-stone-200 px-4 py-2.5 text-xs font-medium flex flex-wrap justify-between items-center border-b border-amber-950/40 shadow-inner z-50">
+    <div class="flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span class="font-serif font-bold tracking-wide text-amber-200">olali.cakes Gent</span>
+      <span class="hidden sm:inline text-stone-400">| Systeemmodus:</span>
+    </div>
+
+    <div class="flex items-center bg-stone-800 p-1 rounded-xl border border-stone-700">
+      <button
+        (click)="currentMode.set('storefront')"
+        class="px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 font-semibold text-xs"
+        [class.bg-rose-600]="currentMode() === 'storefront'"
+        [class.text-white]="currentMode() === 'storefront'"
+        [class.text-stone-300]="currentMode() !== 'storefront'"
+        [class.hover:text-white]="currentMode() !== 'storefront'">
+        <span>🛍️</span> Klant Website
+      </button>
+      <button
+        (click)="currentMode.set('admin')"
+        class="px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 font-semibold text-xs"
+        [class.bg-amber-600]="currentMode() === 'admin'"
+        [class.text-white]="currentMode() === 'admin'"
+        [class.text-stone-300]="currentMode() !== 'admin'"
+        [class.hover:text-white]="currentMode() !== 'admin'">
+        <span>⚙️</span> Beheerderspaneel (Admin)
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- STOREFRONT VIEW                            -->
+  <!-- ========================================== -->
+  @if (currentMode() === 'storefront') {
+
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md shadow-sm border-b border-rose-100 transition-all">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+
+        <div class="flex items-center space-x-3 cursor-pointer" (click)="setActivePage('home')">
+          <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-rose-400 to-amber-300 flex items-center justify-center text-white shadow-md font-serif font-bold text-xl">
+            O
+          </div>
+          <div>
+                <span class="text-2xl font-bold font-serif bg-gradient-to-r from-rose-700 via-rose-600 to-amber-700 bg-clip-text text-transparent">
+                  {{ settings().storeName }}
+                </span>
+            <span class="block text-xs text-amber-800/70 font-medium tracking-wide">
+                  Exclusieve Taarten & Desserts • {{ settings().city }}
+                </span>
+          </div>
+        </div>
+
+        <nav class="hidden md:flex items-center space-x-8 font-medium">
+          <button
+            (click)="setActivePage('home')"
+            class="transition-colors duration-200 py-1 border-b-2"
+            [class.border-rose-500]="activePage() === 'home'"
+            [class.text-rose-600]="activePage() === 'home'"
+            [class.border-transparent]="activePage() !== 'home'"
+            [class.text-stone-600]="activePage() !== 'home'">
+            Startpagina
+          </button>
+          <button
+            (click)="setActivePage('products')"
+            class="transition-colors duration-200 py-1 border-b-2"
+            [class.border-rose-500]="activePage() === 'products'"
+            [class.text-rose-600]="activePage() === 'products'"
+            [class.border-transparent]="activePage() !== 'products'"
+            [class.text-stone-600]="activePage() !== 'products'">
+            Assortiment & Smaken
+          </button>
+          <button
+            (click)="setActivePage('contact')"
+            class="transition-colors duration-200 py-1 border-b-2"
+            [class.border-rose-500]="activePage() === 'contact'"
+            [class.text-rose-600]="activePage() === 'contact'"
+            [class.border-transparent]="activePage() !== 'contact'"
+            [class.text-stone-600]="activePage() !== 'contact'">
+            Bestellen & Contact
+          </button>
+        </nav>
+
+        <div class="hidden md:flex items-center space-x-3">
+          <a
+            [href]="'https://wa.me/' + settings().whatsappNumber"
+            target="_blank"
+            class="px-4 py-2 text-sm rounded-full bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition font-medium flex items-center gap-2">
+            <span>💬</span> WhatsApp {{ settings().city }}
+          </a>
+        </div>
+
+        <div class="md:hidden">
+          <button (click)="toggleMobileMenu()" class="p-2 text-stone-600 hover:text-rose-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="mobileMenuOpen() ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      @if (mobileMenuOpen()) {
+        <div class="md:hidden bg-white border-b border-stone-200 px-4 pt-2 pb-4 space-y-2">
+          <button (click)="setActivePage('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md font-medium text-stone-700">Startpagina</button>
+          <button (click)="setActivePage('products'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md font-medium text-stone-700">Assortiment</button>
+          <button (click)="setActivePage('contact'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md font-medium text-stone-700">Contact</button>
+        </div>
+      }
+    </header>
+
+    <!-- Dynamic Storefront Content -->
+    <main class="flex-grow">
+      @switch (activePage()) {
+
+        <!-- STORE HOME -->
+        @case ('home') {
+          <section class="space-y-16 pb-16">
+
+            <div class="relative overflow-hidden bg-gradient-to-b from-rose-100/50 via-amber-50/40 to-transparent pt-12 pb-20 lg:pt-20 lg:pb-28">
+              <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+                  <div class="space-y-6 text-center lg:text-left">
+                        <span class="inline-block px-4 py-1.5 bg-rose-100 text-rose-800 rounded-full text-xs sm:text-sm font-semibold tracking-wide">
+                          ✨ Ambachtelijk & Vers gebakken in Gent
+                        </span>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif text-stone-900 leading-tight">
+                      Ambachtelijke taarten met <span class="text-rose-600 underline decoration-rose-300">verfijnde</span> crèmes
+                    </h1>
+                    <p class="text-lg text-stone-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                      Welkom bij <strong class="text-stone-800">{{ settings().storeName }}</strong>. Wij maken gepersonaliseerde taarten, heerlijke pistache-, speculoos- en chocoladecrèmes en luxe mini desserts voor al jouw feesten.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
+                      <button (click)="setActivePage('products')" class="px-8 py-3.5 bg-rose-600 hover:bg-rose-700 text-white font-medium rounded-xl shadow-lg shadow-rose-200 transition transform hover:-translate-y-0.5">
+                        Bekijk Assortiment
+                      </button>
+                      <button (click)="setActivePage('contact')" class="px-8 py-3.5 bg-white hover:bg-stone-50 text-stone-700 font-medium rounded-xl border border-stone-200 shadow-sm transition">
+                        Offerte Aanvragen
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="relative mx-auto w-full max-w-md lg:max-w-none">
+                    <div class="aspect-square rounded-3xl overflow-hidden shadow-2xl border-4 border-white relative group">
+                      <img src="https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=800&q=80" alt="Specialty Cake Gent" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
+                      <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent flex items-end p-6">
+                        <div class="text-white">
+                          <p class="text-xs uppercase tracking-wider text-rose-200">Bestseller in Gent</p>
+                          <h3 class="text-xl font-bold font-serif">Pistache & Frambozen Taart</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Featured Products Grid -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div class="flex flex-col sm:flex-row justify-between items-end mb-8 gap-4">
+                <div>
+                  <h2 class="text-3xl font-bold font-serif text-stone-900">Populaire Taarten & Desserts</h2>
+                  <p class="text-stone-500 text-sm mt-1">Kies je favoriete crème en formaat</p>
+                </div>
+                <button (click)="setActivePage('products')" class="text-rose-600 hover:text-rose-700 font-medium text-sm flex items-center gap-1">
+                  Bekijk alle {{ products().length }} producten →
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                @for (product of featuredProducts(); track product.id) {
+                  <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition border border-stone-100 flex flex-col group">
+                    <div class="relative h-64 overflow-hidden bg-stone-100">
+                      <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                      @if (product.badge) {
+                        <span class="absolute top-3 left-3 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                              {{ product.badge }}
+                            </span>
+                      }
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                      <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-lg text-stone-800">{{ product.name }}</h3>
+                        <span class="text-rose-600 font-bold text-sm bg-rose-50 px-2.5 py-1 rounded-lg">
+                              €{{ product.price }}
+                            </span>
+                      </div>
+                      <p class="text-stone-500 text-sm line-clamp-2 mb-4 flex-grow">{{ product.description }}</p>
+                      <button (click)="openProductModal(product)" class="w-full py-2.5 bg-stone-900 hover:bg-rose-600 text-white text-sm font-medium rounded-xl transition">
+                        Opties & Smaken Bekijken
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+
+          </section>
+        }
+
+        <!-- STORE PRODUCTS PAGE -->
+        @case ('products') {
+          <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+              <h1 class="text-4xl font-bold font-serif text-stone-900">Ons Assortiment in Gent</h1>
+              <p class="text-stone-600">Klik op een product om de beschikbare vullingen (Pistache, Belgische chocolade, Speculoos, Vanille) en groottes te bekijken.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              @for (product of products(); track product.id) {
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition border border-stone-100 flex flex-col">
+                  <div class="relative h-64 overflow-hidden bg-stone-100">
+                    <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover" />
+                    <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-md text-xs font-semibold text-stone-700">
+                          {{ product.prepTime }}
+                        </span>
+                    @if (!product.inStock) {
+                      <div class="absolute inset-0 bg-stone-900/60 flex items-center justify-center">
+                        <span class="bg-red-600 text-white font-bold px-4 py-2 rounded-xl text-sm">Tijdelijk Uitverkocht</span>
+                      </div>
+                    }
+                  </div>
+
+                  <div class="p-6 flex flex-col flex-grow">
+                    <div class="flex justify-between items-start mb-2">
+                      <h3 class="font-bold text-lg text-stone-800">{{ product.name }}</h3>
+                      <span class="text-rose-600 font-bold text-base">€{{ product.price }}</span>
+                    </div>
+                    <p class="text-stone-500 text-sm mb-4 flex-grow">{{ product.description }}</p>
+
+                    <div class="mb-4 pt-3 border-t border-stone-100">
+                      <span class="text-xs text-stone-400 block mb-1">Beschikbare crèmes:</span>
+                      <div class="flex flex-wrap gap-1">
+                        @for (cream of product.creams; track cream) {
+                          <span class="text-xs bg-amber-50 text-amber-800 border border-amber-200/60 px-2 py-0.5 rounded-md">
+                                {{ cream }}
+                              </span>
+                        }
+                      </div>
+                    </div>
+
+                    <button
+                      [disabled]="!product.inStock"
+                      (click)="openProductModal(product)"
+                      class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-sm font-medium rounded-xl transition">
+                      {{ product.inStock ? 'Selecteer & Bestel' : 'Niet Beschikbaar' }}
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          </section>
+        }
+
+        <!-- STORE CONTACT PAGE -->
+        @case ('contact') {
+          <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+              <h1 class="text-4xl font-bold font-serif text-stone-900">Plaats een Bestelling</h1>
+              <p class="text-stone-600 mt-2">Vul je gegevens in. Bestellingen worden rechtstreeks doorgestuurd naar ons beheerderspaneel.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              <div class="lg:col-span-5 bg-white p-8 rounded-3xl shadow-sm border border-stone-100 space-y-6">
+                <h2 class="text-2xl font-bold font-serif text-stone-900 border-b border-rose-100 pb-4">Winkel Details</h2>
+                <p class="text-stone-600 text-sm">📍 <strong>Adres:</strong> {{ settings().address }}, {{ settings().city }}</p>
+                <p class="text-stone-600 text-sm">🕒 <strong>Openingstijden:</strong> {{ settings().openingHours }}</p>
+                <p class="text-stone-600 text-sm">⏳ <strong>Besteltermijn:</strong> Minstens {{ settings().minAdvanceHours }} uur op voorhand bestellen.</p>
+                <p class="text-stone-600 text-sm">📱 <strong>WhatsApp:</strong> +{{ settings().whatsappNumber }}</p>
+              </div>
+
+              <div class="lg:col-span-7 bg-white p-8 rounded-3xl shadow-sm border border-stone-100">
+                @if (orderSubmittedSuccess()) {
+                  <div class="p-8 text-center space-y-4">
+                    <span class="text-5xl block">🎉</span>
+                    <h3 class="text-2xl font-bold text-stone-800 font-serif">Bedankt voor je bestelling!</h3>
+                    <p class="text-stone-600 text-sm">Je bestelling is ontvangen in ons beheerderspaneel. Wij nemen snel contact op via WhatsApp om te bevestigen.</p>
+                    <button (click)="orderSubmittedSuccess.set(false)" class="px-6 py-2.5 bg-rose-600 text-white font-medium text-sm rounded-xl">
+                      Nog een bestelling plaatsen
+                    </button>
+                  </div>
+                } @else {
+                  <form [formGroup]="customerOrderForm" (ngSubmit)="submitCustomerOrder()" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Naam *</label>
+                        <input type="text" formControlName="customerName" class="w-full p-3 rounded-xl border text-sm" placeholder="Je volledige naam" />
+                      </div>
+                      <div>
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Telefoon / WhatsApp *</label>
+                        <input type="tel" formControlName="phone" class="w-full p-3 rounded-xl border text-sm" placeholder="+32 4xx xx xx xx" />
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Afhaaldatum *</label>
+                        <input type="date" formControlName="pickupDate" class="w-full p-3 rounded-xl border text-sm" />
+                      </div>
+                      <div>
+                        <label class="block text-xs font-bold text-stone-700 mb-1">Afhaaltijd *</label>
+                        <input type="time" formControlName="pickupTime" class="w-full p-3 rounded-xl border text-sm" />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label class="block text-xs font-bold text-stone-700 mb-1">Kies Product *</label>
+                      <select formControlName="productName" class="w-full p-3 rounded-xl border text-sm bg-white">
+                        @for (p of products(); track p.id) {
+                          <option [value]="p.name">{{ p.name }} (€{{ p.price }})</option>
+                        }
+                      </select>
+                    </div>
+
+                    <div>
+                      <label class="block text-xs font-bold text-stone-700 mb-1">Voorkeur Crème / Vulling *</label>
+                      <select formControlName="creamOption" class="w-full p-3 rounded-xl border text-sm bg-white">
+                        <option value="Pistachecrème">Pure Pistachecrème</option>
+                        <option value="Belgische Chocolade">Belgische Chocolade (Puur/Melk)</option>
+                        <option value="Speculoos / Lotus">Speculoos / Lotus Crème</option>
+                        <option value="Vanille & Melk">Vanille & Melk Crème</option>
+                        <option value="Verse Fruitcrème">Verse Fruitcrème (Framboos/Mango)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label class="block text-xs font-bold text-stone-700 mb-1">Opmerkingen / Allergieën</label>
+                      <textarea formControlName="notes" rows="3" class="w-full p-3 rounded-xl border text-sm" placeholder="Aantal personen, kleurenschema, wensen..."></textarea>
+                    </div>
+
+                    <button
+                      type="submit"
+                      [disabled]="customerOrderForm.invalid"
+                      class="w-full py-3.5 bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white font-medium rounded-xl shadow-md transition">
+                      Bestelling Versturen
+                    </button>
+                  </form>
+                }
+              </div>
+            </div>
+          </section>
+        }
+      }
+    </main>
+
+  }
+
+  <!-- ========================================== -->
+  <!-- ADMIN PANEL VIEW (BEHEERDERSPANEEL)        -->
+  <!-- ========================================== -->
+  @if (currentMode() === 'admin') {
+    <div class="flex-grow flex flex-col md:flex-row bg-stone-100">
+
+      <!-- Admin Sidebar Navigation -->
+      <aside class="w-full md:w-64 bg-stone-900 text-stone-300 p-6 flex flex-col justify-between border-r border-stone-800">
+        <div class="space-y-6">
+          <div class="pb-4 border-b border-stone-800">
+            <span class="text-xs uppercase tracking-widest text-amber-400 font-bold block">Beheerderspaneel</span>
+            <h2 class="text-xl font-bold font-serif text-white mt-1">{{ settings().storeName }}</h2>
+            <p class="text-xs text-stone-400">Gent • Dashboard v2.0</p>
+          </div>
+
+          <nav class="space-y-1.5 text-sm font-medium">
+            <button
+              (click)="adminTab.set('dashboard')"
+              class="w-full text-left px-4 py-3 rounded-xl transition flex items-center justify-between"
+              [class.bg-amber-600]="adminTab() === 'dashboard'"
+              [class.text-white]="adminTab() === 'dashboard'"
+              [class.hover:bg-stone-800]="adminTab() !== 'dashboard'">
+              <span class="flex items-center gap-2">📊 Overzicht & Stats</span>
+            </button>
+
+            <button
+              (click)="adminTab.set('orders')"
+              class="w-full text-left px-4 py-3 rounded-xl transition flex items-center justify-between"
+              [class.bg-amber-600]="adminTab() === 'orders'"
+              [class.text-white]="adminTab() === 'orders'"
+              [class.hover:bg-stone-800]="adminTab() !== 'orders'">
+              <span class="flex items-center gap-2">📦 Bestellingen</span>
+              <span class="bg-amber-500/30 text-amber-200 text-xs px-2 py-0.5 rounded-full font-bold">
+                    {{ orders().length }}
+                  </span>
+            </button>
+
+            <button
+              (click)="adminTab.set('products')"
+              class="w-full text-left px-4 py-3 rounded-xl transition flex items-center justify-between"
+              [class.bg-amber-600]="adminTab() === 'products'"
+              [class.text-white]="adminTab() === 'products'"
+              [class.hover:bg-stone-800]="adminTab() !== 'products'">
+              <span class="flex items-center gap-2">🎂 Productbeheer</span>
+              <span class="text-xs text-stone-400">({{ products().length }})</span>
+            </button>
+
+            <button
+              (click)="adminTab.set('settings')"
+              class="w-full text-left px-4 py-3 rounded-xl transition flex items-center justify-between"
+              [class.bg-amber-600]="adminTab() === 'settings'"
+              [class.text-white]="adminTab() === 'settings'"
+              [class.hover:bg-stone-800]="adminTab() !== 'settings'">
+              <span class="flex items-center gap-2">⚙️ Winkelinstellingen</span>
+            </button>
+          </nav>
+        </div>
+
+        <div class="pt-6 border-t border-stone-800 text-xs text-stone-500">
+          Ingelogd als Beheerder Gent
+        </div>
+      </aside>
+
+      <!-- Main Admin Content Area -->
+      <main class="flex-grow p-6 lg:p-10 space-y-8 overflow-y-auto">
+
+        <!-- ADMIN DASHBOARD OVERVIEW -->
+        @if (adminTab() === 'dashboard') {
+          <div class="space-y-8">
+            <div>
+              <h1 class="text-3xl font-bold font-serif text-stone-900">Overzicht & Statistieken</h1>
+              <p class="text-stone-500 text-sm mt-1">Prestaties en bestellingen van olali.cakes Gent</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                <span class="text-xs font-bold text-stone-400 uppercase">Totaal Bestellingen</span>
+                <div class="text-3xl font-bold text-stone-900 mt-2">{{ orders().length }}</div>
+                <span class="text-xs text-emerald-600 font-medium">Actief verwerkt</span>
+              </div>
+
+              <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                <span class="text-xs font-bold text-stone-400 uppercase">Geschatte Omzet</span>
+                <div class="text-3xl font-bold text-amber-700 mt-2">€{{ totalRevenue() }}</div>
+                <span class="text-xs text-stone-500">Genoemde richtprijzen</span>
+              </div>
+
+              <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                <span class="text-xs font-bold text-stone-400 uppercase">Aantal Producten</span>
+                <div class="text-3xl font-bold text-rose-600 mt-2">{{ products().length }}</div>
+                <span class="text-xs text-stone-500">In assortiment</span>
+              </div>
+
+              <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                <span class="text-xs font-bold text-stone-400 uppercase">Populairste Crème</span>
+                <div class="text-xl font-bold text-stone-800 mt-2">Pistache Crème</div>
+                <span class="text-xs text-amber-600 font-medium">Top keuze in Gent</span>
+              </div>
+            </div>
+
+            <!-- Recent Orders Preview -->
+            <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden p-6 space-y-4">
+              <div class="flex justify-between items-center border-b pb-4">
+                <h3 class="font-bold text-lg text-stone-800">Recente Binnengekomen Bestellingen</h3>
+                <button (click)="adminTab.set('orders')" class="text-xs font-bold text-rose-600 hover:underline">Bekijk alles →</button>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-stone-600">
+                  <thead class="bg-stone-50 text-stone-400 uppercase text-xs font-bold">
+                  <tr>
+                    <th class="p-3">Klant</th>
+                    <th class="p-3">Product</th>
+                    <th class="p-3">Crème Choice</th>
+                    <th class="p-3">Afhaaldatum</th>
+                    <th class="p-3">Status</th>
+                  </tr>
+                  </thead>
+                  <tbody class="divide-y divide-stone-100">
+                    @for (order of orders().slice(0, 5); track order.id) {
+                      <tr>
+                        <td class="p-3 font-bold text-stone-800">{{ order.customerName }}</td>
+                        <td class="p-3">{{ order.productName }}</td>
+                        <td class="p-3"><span class="bg-amber-50 text-amber-800 px-2 py-0.5 rounded text-xs">{{ order.creamOption }}</span></td>
+                        <td class="p-3">{{ order.pickupDate }} ({{ order.pickupTime }})</td>
+                        <td class="p-3">
+                              <span class="px-2.5 py-1 rounded-full text-xs font-bold"
+                                    [class.bg-blue-100]="order.status === 'Nieuw'"
+                                    [class.text-blue-800]="order.status === 'Nieuw'"
+                                    [class.bg-amber-100]="order.status === 'In behandeling'"
+                                    [class.text-amber-800]="order.status === 'In behandeling'"
+                                    [class.bg-emerald-100]="order.status === 'Gereed voor afhalen' || order.status === 'Voltooid'"
+                                    [class.text-emerald-800]="order.status === 'Gereed voor afhalen' || order.status === 'Voltooid'">
+                                {{ order.status }}
+                              </span>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- ADMIN ORDERS MANAGEMENT -->
+        @if (adminTab() === 'orders') {
+          <div class="space-y-6">
+            <div>
+              <h1 class="text-3xl font-bold font-serif text-stone-900">Bestellingen Beheren</h1>
+              <p class="text-stone-500 text-sm mt-1">Beheer de status van bestellingen en stuur direct updates via WhatsApp</p>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-stone-700">
+                  <thead class="bg-stone-50 text-stone-400 uppercase text-xs font-bold border-b">
+                  <tr>
+                    <th class="p-4">ID</th>
+                    <th class="p-4">Klant & Telefoon</th>
+                    <th class="p-4">Product & Crème</th>
+                    <th class="p-4">Afhaaltijd</th>
+                    <th class="p-4">Prijs</th>
+                    <th class="p-4">Status</th>
+                    <th class="p-4 text-right">Actie</th>
+                  </tr>
+                  </thead>
+                  <tbody class="divide-y divide-stone-100">
+                    @for (order of orders(); track order.id) {
+                      <tr class="hover:bg-stone-50">
+                        <td class="p-4 font-mono text-xs font-bold text-stone-400">#{{ order.id }}</td>
+                        <td class="p-4">
+                          <div class="font-bold text-stone-800">{{ order.customerName }}</div>
+                          <div class="text-xs text-stone-500">{{ order.phone }}</div>
+                        </td>
+                        <td class="p-4">
+                          <div class="font-medium">{{ order.productName }}</div>
+                          <div class="text-xs text-amber-700 font-semibold">Crème: {{ order.creamOption }}</div>
+                        </td>
+                        <td class="p-4">
+                          <div class="text-xs font-bold">{{ order.pickupDate }}</div>
+                          <div class="text-xs text-stone-400">{{ order.pickupTime }} uur</div>
+                        </td>
+                        <td class="p-4 font-bold text-rose-600">€{{ order.totalPrice }}</td>
+                        <td class="p-4">
+                          <select
+                            [value]="order.status"
+                            (change)="updateOrderStatus(order.id, $event)"
+                            class="text-xs font-bold p-2 rounded-xl border bg-white">
+                            <option value="Nieuw">🔵 Nieuw</option>
+                            <option value="In behandeling">🟡 In behandeling</option>
+                            <option value="Gereed voor afhalen">🟢 Gereed voor afhalen</option>
+                            <option value="Voltooid">✅ Voltooid</option>
+                            <option value="Geannuleerd">🔴 Geannuleerd</option>
+                          </select>
+                        </td>
+                        <td class="p-4 text-right space-x-2">
+                          <button
+                            (click)="sendWhatsAppStatus(order)"
+                            class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold inline-flex items-center gap-1">
+                            💬 WhatsApp Update
+                          </button>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- ADMIN PRODUCTS MANAGEMENT -->
+        @if (adminTab() === 'products') {
+          <div class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h1 class="text-3xl font-bold font-serif text-stone-900">Productbeheer</h1>
+                <p class="text-stone-500 text-sm mt-1">Voeg nieuwe taarten toe, wijzig prijzen of verander crèmesoorten</p>
+              </div>
+              <button
+                (click)="openProductFormModal()"
+                class="px-5 py-3 bg-amber-600 hover:bg-amber-700 text-white font-medium text-sm rounded-xl shadow-md transition flex items-center gap-2">
+                <span>➕</span> Nieuw Product Toevoegen
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              @for (product of products(); track product.id) {
+                <div class="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm flex flex-col">
+                  <div class="relative h-48 bg-stone-100">
+                    <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover" />
+                    <span class="absolute top-3 left-3 bg-stone-900/80 text-white text-xs px-2.5 py-1 rounded-md font-bold">
+                          €{{ product.price }}
+                        </span>
+                  </div>
+
+                  <div class="p-5 flex flex-col flex-grow space-y-3">
+                    <div class="flex justify-between items-start">
+                      <h3 class="font-bold text-base text-stone-800">{{ product.name }}</h3>
+                      <span class="text-xs px-2 py-0.5 rounded font-bold"
+                            [class.bg-emerald-100]="product.inStock"
+                            [class.text-emerald-800]="product.inStock"
+                            [class.bg-red-100]="!product.inStock"
+                            [class.text-red-800]="!product.inStock">
+                            {{ product.inStock ? 'Op voorraad' : 'Uitverkocht' }}
+                          </span>
+                    </div>
+
+                    <p class="text-xs text-stone-500 line-clamp-2">{{ product.description }}</p>
+
+                    <div class="text-xs space-y-1 bg-amber-50/60 p-2.5 rounded-xl border border-amber-100">
+                      <span class="font-bold text-amber-900">Crèmes:</span>
+                      <div class="flex flex-wrap gap-1 mt-1">
+                        @for (c of product.creams; track c) {
+                          <span class="bg-white px-2 py-0.5 rounded text-[10px] font-medium border text-stone-700">{{ c }}</span>
+                        }
+                      </div>
+                    </div>
+
+                    <div class="pt-2 flex gap-2 border-t mt-auto">
+                      <button
+                        (click)="openProductFormModal(product)"
+                        class="flex-1 py-2 bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-bold rounded-xl transition">
+                        ✏️ Bewerken
+                      </button>
+                      <button
+                        (click)="deleteProduct(product.id)"
+                        class="py-2 px-3 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-xl transition">
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- ADMIN STORE SETTINGS -->
+        @if (adminTab() === 'settings') {
+          <div class="max-w-3xl space-y-6">
+            <div>
+              <h1 class="text-3xl font-bold font-serif text-stone-900">Winkelinstellingen (Gent)</h1>
+              <p class="text-stone-500 text-sm mt-1">Pas je locatiegegevens, telefoonnummer en openingstijden aan</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-sm space-y-6">
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-xs font-bold text-stone-700 mb-1">Winkelnaam</label>
+                  <input
+                    type="text"
+                    [value]="settings().storeName"
+                    (input)="updateSettingField('storeName', $event)"
+                    class="w-full p-3 rounded-xl border text-sm" />
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-stone-700 mb-1">Stad</label>
+                    <input
+                      type="text"
+                      [value]="settings().city"
+                      (input)="updateSettingField('city', $event)"
+                      class="w-full p-3 rounded-xl border text-sm" />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-bold text-stone-700 mb-1">WhatsApp Nummer (zonder +)</label>
+                    <input
+                      type="text"
+                      [value]="settings().whatsappNumber"
+                      (input)="updateSettingField('whatsappNumber', $event)"
+                      class="w-full p-3 rounded-xl border text-sm" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-stone-700 mb-1">Afhaaladres Gent</label>
+                  <input
+                    type="text"
+                    [value]="settings().address"
+                    (input)="updateSettingField('address', $event)"
+                    class="w-full p-3 rounded-xl border text-sm" />
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-stone-700 mb-1">Openingstijden</label>
+                  <input
+                    type="text"
+                    [value]="settings().openingHours"
+                    (input)="updateSettingField('openingHours', $event)"
+                    class="w-full p-3 rounded-xl border text-sm" />
+                </div>
+              </div>
+
+              <div class="p-4 bg-emerald-50 text-emerald-800 rounded-2xl text-xs font-medium border border-emerald-200">
+                ✓ Wijzigingen worden direct toegepast op de klantwebsite.
+              </div>
+            </div>
+          </div>
+        }
+
+      </main>
+    </div>
+  }
+
+  <!-- MODAL: Customer Product Selection -->
+  @if (selectedProduct(); as product) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm animate-fade-in">
+      <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-stone-100 flex flex-col max-h-[90vh]">
+        <div class="relative h-64 bg-stone-100">
+          <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover" />
+          <button (click)="closeProductModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/80 font-bold">✕</button>
+        </div>
+
+        <div class="p-6 overflow-y-auto space-y-4">
+          <div class="flex justify-between items-start">
+            <div>
+              <h2 class="text-2xl font-bold font-serif text-stone-900">{{ product.name }}</h2>
+              <p class="text-xs text-stone-400">Bereidingstijd: {{ product.prepTime }}</p>
+            </div>
+            <span class="text-xl font-bold text-rose-600">€{{ product.price }}</span>
+          </div>
+
+          <p class="text-stone-600 text-sm">{{ product.longDescription }}</p>
+
+          <div>
+            <label class="block font-bold text-sm text-stone-800 mb-2">Selecteer Crème Vulling:</label>
+            <div class="grid grid-cols-2 gap-2">
+              @for (cream of product.creams; track cream) {
+                <button
+                  (click)="selectedCreamOption.set(cream)"
+                  class="p-3 rounded-xl border text-xs font-medium text-center transition"
+                  [class.border-rose-600]="selectedCreamOption() === cream"
+                  [class.bg-rose-50]="selectedCreamOption() === cream"
+                  [class.text-rose-700]="selectedCreamOption() === cream">
+                  ✨ {{ cream }}
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-stone-50 border-t flex gap-3">
+          <button
+            (click)="orderProductViaWhatsApp(product)"
+            class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm rounded-xl">
+            💬 Direct via WhatsApp Bestellen
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL: Admin Add/Edit Product -->
+  @if (showProductFormModal()) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm">
+      <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+        <h3 class="text-xl font-bold font-serif text-stone-900">
+          {{ editingProductId() ? 'Product Bewerken' : 'Nieuw Product Toevoegen' }}
+        </h3>
+
+        <form [formGroup]="productAdminForm" (ngSubmit)="saveAdminProduct()" class="space-y-3">
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">Productnaam *</label>
+            <input type="text" formControlName="name" class="w-full p-2.5 rounded-xl border text-sm" />
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1">Categorie *</label>
+              <select formControlName="category" class="w-full p-2.5 rounded-xl border text-sm bg-white">
+                <option value="cakes">Taart op maat</option>
+                <option value="mini-sweets">Mini Sweets</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1">Prijs (€) *</label>
+              <input type="number" formControlName="price" class="w-full p-2.5 rounded-xl border text-sm" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">Afbeelding URL</label>
+            <input type="text" formControlName="image" class="w-full p-2.5 rounded-xl border text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">Crèmesoorten (komma gescheiden)</label>
+            <input type="text" formControlName="creamsInput" class="w-full p-2.5 rounded-xl border text-sm" placeholder="Pistache, Chocolade, Speculoos..." />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">Beschrijving</label>
+            <textarea formControlName="description" rows="2" class="w-full p-2.5 rounded-xl border text-sm"></textarea>
+          </div>
+
+          <div class="flex items-center gap-2 pt-2">
+            <input type="checkbox" formControlName="inStock" id="stockCheck" class="w-4 h-4 text-amber-600 rounded" />
+            <label for="stockCheck" class="text-xs font-bold text-stone-700">Op voorraad (Beschikbaar voor bestelling)</label>
+          </div>
+
+          <div class="flex gap-2 pt-4 border-t">
+            <button type="submit" [disabled]="productAdminForm.invalid" class="flex-1 py-2.5 bg-amber-600 text-white text-xs font-bold rounded-xl">
+              Product Opslaan
+            </button>
+            <button type="button" (click)="closeProductFormModal()" class="py-2.5 px-4 bg-stone-200 text-stone-700 text-xs font-bold rounded-xl">
+              Annuleren
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+</div>

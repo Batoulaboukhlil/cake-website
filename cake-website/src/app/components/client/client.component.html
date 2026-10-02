@@ -1,0 +1,718 @@
+<div class="min-h-screen flex flex-col bg-amber-50/30 text-stone-800 font-sans" dir="ltr">
+
+  <!-- Navbar -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md shadow-sm border-b border-rose-100 transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+
+      <!-- Brand / Logo -->
+      <div class="flex items-center space-x-3 cursor-pointer" (click)="setActivePage('home')">
+        <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-rose-400 to-amber-300 flex items-center justify-center text-white shadow-md font-serif font-bold text-xl">
+          O
+        </div>
+        <div>
+              <span class="text-2xl font-bold font-serif bg-gradient-to-r from-rose-700 via-rose-600 to-amber-700 bg-clip-text text-transparent">
+                olali.cakes
+              </span>
+          <span class="block text-xs text-amber-800/70 font-medium tracking-wide">
+                Exclusieve Taarten & Desserts • Gent
+              </span>
+        </div>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center space-x-8 font-medium">
+        <button
+          (click)="setActivePage('home')"
+          class="transition-colors duration-200 py-1 border-b-2"
+          [class.border-rose-500]="activePage() === 'home'"
+          [class.text-rose-600]="activePage() === 'home'"
+          [class.border-transparent]="activePage() !== 'home'"
+          [class.text-stone-600]="activePage() !== 'home'"
+          [class.hover:text-rose-500]="activePage() !== 'home'">
+          Startpagina
+        </button>
+        <button
+          (click)="setActivePage('products')"
+          class="transition-colors duration-200 py-1 border-b-2"
+          [class.border-rose-500]="activePage() === 'products'"
+          [class.text-rose-600]="activePage() === 'products'"
+          [class.border-transparent]="activePage() !== 'products'"
+          [class.text-stone-600]="activePage() !== 'products'"
+          [class.hover:text-rose-500]="activePage() !== 'products'">
+          Producten & Assortiment
+        </button>
+        <button
+          (click)="setActivePage('contact')"
+          class="transition-colors duration-200 py-1 border-b-2"
+          [class.border-rose-500]="activePage() === 'contact'"
+          [class.text-rose-600]="activePage() === 'contact'"
+          [class.border-transparent]="activePage() !== 'contact'"
+          [class.text-stone-600]="activePage() !== 'contact'"
+          [class.hover:text-rose-500]="activePage() !== 'contact'">
+          Contact & Bestellen
+        </button>
+      </nav>
+
+      <!-- Contact Quick Button -->
+      <div class="hidden md:flex items-center space-x-3">
+        <a href="https://wa.me/32480000000" target="_blank" class="px-4 py-2 text-sm rounded-full bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition font-medium flex items-center gap-2">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+          Direct WhatsApp
+        </a>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button (click)="toggleMobileMenu()" class="p-2 text-stone-600 hover:text-rose-600 focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="mobileMenuOpen() ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    @if (mobileMenuOpen()) {
+      <div class="md:hidden bg-white border-b border-stone-200 px-4 pt-2 pb-4 space-y-2">
+        <button
+          (click)="setActivePage('home'); toggleMobileMenu()"
+          class="block w-full text-left px-3 py-2 rounded-md font-medium"
+          [class.bg-rose-50]="activePage() === 'home'"
+          [class.text-rose-600]="activePage() === 'home'">
+          Startpagina
+        </button>
+        <button
+          (click)="setActivePage('products'); toggleMobileMenu()"
+          class="block w-full text-left px-3 py-2 rounded-md font-medium"
+          [class.bg-rose-50]="activePage() === 'products'"
+          [class.text-rose-600]="activePage() === 'products'">
+          Producten & Assortiment
+        </button>
+        <button
+          (click)="setActivePage('contact'); toggleMobileMenu()"
+          class="block w-full text-left px-3 py-2 rounded-md font-medium"
+          [class.bg-rose-50]="activePage() === 'contact'"
+          [class.text-rose-600]="activePage() === 'contact'">
+          Contact & Bestellen
+        </button>
+      </div>
+    }
+  </header>
+
+  <!-- Main Dynamic Content -->
+  <main class="flex-grow">
+    @switch (activePage()) {
+      @case ('home') {
+        <section class="space-y-16 pb-16">
+
+          <!-- Hero Section -->
+          <div class="relative overflow-hidden bg-gradient-to-b from-rose-100/50 via-amber-50/40 to-transparent pt-12 pb-20 lg:pt-20 lg:pb-28">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+                <div class="space-y-6 text-center lg:text-left">
+                      <span class="inline-block px-4 py-1.5 bg-rose-100 text-rose-800 rounded-full text-xs sm:text-sm font-semibold tracking-wide">
+                        ✨ Ambachtelijk & met liefde gemaakt in Gent
+                      </span>
+                  <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif text-stone-900 leading-tight">
+                    Ambachtelijke taarten voor jouw <span class="text-rose-600 underline decoration-rose-300">bijzondere</span> momenten
+                  </h1>
+                  <p class="text-lg text-stone-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                    Welkom bij <strong class="text-stone-800">olali.cakes</strong>. Wij maken gepersonaliseerde taarten en luxe mini desserts voor al jouw feesten en speciale gelegenheden in Gent en omgeving.
+                  </p>
+
+                  <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
+                    <button (click)="setActivePage('products')" class="px-8 py-3.5 bg-rose-600 hover:bg-rose-700 text-white font-medium rounded-xl shadow-lg shadow-rose-200 transition transform hover:-translate-y-0.5">
+                      Bekijk Assortiment
+                    </button>
+                    <button (click)="setActivePage('contact')" class="px-8 py-3.5 bg-white hover:bg-stone-50 text-stone-700 font-medium rounded-xl border border-stone-200 shadow-sm transition">
+                      Offerte / Taart op Maat
+                    </button>
+                  </div>
+
+                  <div class="pt-6 flex items-center justify-center lg:justify-start space-x-6 text-sm text-stone-500">
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-amber-500 font-bold">★ 4.9</span>
+                      <span>Klantbeoordeling</span>
+                    </div>
+                    <span>•</span>
+                    <div>Afhalen & Levering in Gent</div>
+                  </div>
+                </div>
+
+                <!-- Hero Visual -->
+                <div class="relative mx-auto w-full max-w-md lg:max-w-none">
+                  <div class="aspect-square rounded-3xl overflow-hidden shadow-2xl border-4 border-white relative group">
+                    <img
+                      src="https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=800&q=80"
+                      alt="Olali Specialty Cake"
+                      class="w-full h-full object-cover group-hover:scale-105 transition duration-700"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent flex items-end p-6">
+                      <div class="text-white">
+                        <p class="text-xs uppercase tracking-wider text-rose-200">Meest populair deze week</p>
+                        <h3 class="text-xl font-bold font-serif">Pistache & Frambozen Taart</h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Floating Badge -->
+                  <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl border border-amber-100 hidden sm:flex items-center gap-3">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-800 rounded-xl flex items-center justify-center text-xl">
+                      🎂
+                    </div>
+                    <div>
+                      <h4 class="font-bold text-stone-800 text-sm">100% Verse Crème</h4>
+                      <p class="text-xs text-stone-500">Rijke & natuurlijke smaken</p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Store Story / About -->
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-sm border border-stone-100">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                <div class="md:col-span-1 text-center md:text-left">
+                  <h2 class="text-sm font-bold uppercase tracking-wider text-rose-500">Ons Verhaal in Gent</h2>
+                  <p class="text-3xl font-bold font-serif text-stone-900 mt-2">Passie voor bakken & verfijnde details</p>
+                </div>
+                <div class="md:col-span-2 text-stone-600 space-y-4 text-base leading-relaxed">
+                  <p>
+                    <strong class="text-stone-800">olali.cakes</strong> is ontstaan vanuit een passie om van elk feestelijk moment in het hart van Gent een smakelijk kunstwerk te maken.
+                  </p>
+                  <p>
+                    Wij combineren verfijnde Belgische en Europese patisserietechnieken met de meest geliefde smaken zoals authentieke Pistache, Belgische Speculoos/Lotus, en rijke chocolade. Elke taart wordt op bestelling vers gebakken.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Featured Products Slider / Grid -->
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-end mb-8 gap-4">
+              <div>
+                <h2 class="text-3xl font-bold font-serif text-stone-900">Populaire Taarten & Desserts</h2>
+                <p class="text-stone-500 text-sm mt-1">Ontdek onze favoriete creaties in Gent</p>
+              </div>
+              <button (click)="setActivePage('products')" class="text-rose-600 hover:text-rose-700 font-medium text-sm flex items-center gap-1 group">
+                Bekijk alle producten
+                <span class="group-hover:translate-x-1 transition-transform">→</span>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              @for (product of featuredProducts(); track product.id) {
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition border border-stone-100 flex flex-col group">
+                  <div class="relative h-64 overflow-hidden bg-stone-100">
+                    <img
+                      [src]="product.image"
+                      [alt]="product.name"
+                      class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                    />
+                    @if (product.badge) {
+                      <span class="absolute top-3 left-3 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                            {{ product.badge }}
+                          </span>
+                    }
+                  </div>
+                  <div class="p-6 flex flex-col flex-grow">
+                    <div class="flex justify-between items-start mb-2">
+                      <h3 class="font-bold text-lg text-stone-800">{{ product.name }}</h3>
+                      <span class="text-rose-600 font-bold text-sm bg-rose-50 px-2.5 py-1 rounded-lg">
+                            Vanaf €{{ product.price }}
+                          </span>
+                    </div>
+                    <p class="text-stone-500 text-sm line-clamp-2 mb-4 flex-grow">{{ product.description }}</p>
+
+                    <button
+                      (click)="openProductModal(product)"
+                      class="w-full py-2.5 bg-stone-900 hover:bg-rose-600 text-white text-sm font-medium rounded-xl transition">
+                      Bekijk Opties & Smaken
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Testimonials -->
+          <div class="bg-amber-100/40 py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="text-3xl font-bold font-serif text-stone-900">Wat onze klanten in Gent zeggen</h2>
+                <p class="text-stone-600 text-sm mt-2">Betrouwbaar, stipt en oog voor elk detail</p>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose-50">
+                  <div class="text-amber-400 mb-3 text-lg">★★★★★</div>
+                  <p class="text-stone-600 text-sm leading-relaxed mb-4">
+                    "De pistache en frambozen taart voor de verjaardag van mijn dochter was een absoluut succes. Niet te zoet, heerlijke verse crème. Heel erg bedankt olali.cakes!"
+                  </p>
+                  <div class="font-bold text-stone-800 text-sm">Sarah M. (Gent)</div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose-50">
+                  <div class="text-amber-400 mb-3 text-lg">★★★★★</div>
+                  <p class="text-stone-600 text-sm leading-relaxed mb-4">
+                    "De mini desserts en cupcakes waren fantastisch gepresenteerd tijdens ons gezinsfeest in Sint-Amandsberg. Uitstekende service en kwaliteit!"
+                  </p>
+                  <div class="font-bold text-stone-800 text-sm">Thomas K. (Gent)</div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose-50">
+                  <div class="text-amber-400 mb-3 text-lg">★★★★★</div>
+                  <p class="text-stone-600 text-sm leading-relaxed mb-4">
+                    "Heel vlotte communicatie via WhatsApp. Taart stipt op tijd klaar en super vers gebakken."
+                  </p>
+                  <div class="font-bold text-stone-800 text-sm">Emma L. (Gent Centrum)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+      }
+
+      @case ('products') {
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+
+          <div class="text-center max-w-3xl mx-auto space-y-3">
+            <h1 class="text-4xl font-bold font-serif text-stone-900">Assortiment Taarten & Desserts</h1>
+            <p class="text-stone-600">
+              Klik op een product om de richtprijzen, formaten en beschikbare crèmesoorten (chocolade, pistache, speculoos, vanille) te bekijken.
+            </p>
+          </div>
+
+          <!-- Filter Tabs -->
+          <div class="flex justify-center border-b border-stone-200">
+            <div class="flex space-x-4">
+              <button
+                (click)="selectedCategory.set('all')"
+                class="pb-3 px-4 font-medium text-sm border-b-2 transition"
+                [class.border-rose-600]="selectedCategory() === 'all'"
+                [class.text-rose-600]="selectedCategory() === 'all'"
+                [class.border-transparent]="selectedCategory() !== 'all'"
+                [class.text-stone-500]="selectedCategory() !== 'all'">
+                Alles ({{ allProducts().length }})
+              </button>
+              <button
+                (click)="selectedCategory.set('cakes')"
+                class="pb-3 px-4 font-medium text-sm border-b-2 transition"
+                [class.border-rose-600]="selectedCategory() === 'cakes'"
+                [class.text-rose-600]="selectedCategory() === 'cakes'"
+                [class.border-transparent]="selectedCategory() !== 'cakes'"
+                [class.text-stone-500]="selectedCategory() !== 'cakes'">
+                🎂 Taarten op Maat
+              </button>
+              <button
+                (click)="selectedCategory.set('mini-sweets')"
+                class="pb-3 px-4 font-medium text-sm border-b-2 transition"
+                [class.border-rose-600]="selectedCategory() === 'mini-sweets'"
+                [class.text-rose-600]="selectedCategory() === 'mini-sweets'"
+                [class.border-transparent]="selectedCategory() !== 'mini-sweets'"
+                [class.text-stone-500]="selectedCategory() !== 'mini-sweets'">
+                🧁 Mini Sweets & Desserts
+              </button>
+            </div>
+          </div>
+
+          <!-- Product Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
+            @for (product of filteredProducts(); track product.id) {
+              <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-stone-100 flex flex-col group">
+                <div class="relative h-64 overflow-hidden bg-stone-100">
+                  <img
+                    [src]="product.image"
+                    [alt]="product.name"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                  />
+                  <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-md text-xs font-semibold text-stone-700 shadow-sm">
+                        Bereidingstijd: {{ product.prepTime }}
+                      </span>
+                </div>
+
+                <div class="p-6 flex flex-col flex-grow">
+                  <div class="flex justify-between items-start mb-2">
+                    <h3 class="font-bold text-lg text-stone-800">{{ product.name }}</h3>
+                    <div class="text-right">
+                      <span class="text-xs text-stone-400 block">Richtprijs</span>
+                      <span class="text-rose-600 font-bold text-base">€{{ product.price }}</span>
+                    </div>
+                  </div>
+
+                  <p class="text-stone-500 text-sm leading-relaxed mb-4 flex-grow line-clamp-3">
+                    {{ product.description }}
+                  </p>
+
+                  <!-- Cream options preview badge -->
+                  <div class="mb-4 pt-3 border-t border-stone-100">
+                    <span class="text-xs text-stone-400 block mb-1.5">Beschikbare crèmes:</span>
+                    <div class="flex flex-wrap gap-1">
+                      @for (cream of product.creams; track cream) {
+                        <span class="text-xs bg-amber-50 text-amber-800 border border-amber-200/60 px-2 py-0.5 rounded-md">
+                              {{ cream }}
+                            </span>
+                      }
+                    </div>
+                  </div>
+
+                  <button
+                    (click)="openProductModal(product)"
+                    class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-sm font-medium rounded-xl transition shadow-sm">
+                    Details & Bestellen
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+
+        </section>
+      }
+
+      @case ('contact') {
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+          <div class="text-center max-w-2xl mx-auto mb-12">
+            <h1 class="text-4xl font-bold font-serif text-stone-900">Contact & Taart Bestellen</h1>
+            <p class="text-stone-600 mt-2">
+              Vul onderstaand formulier in voor bestellingen en prijsopgaven in Gent en omstreken.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+
+            <!-- Contact Info Sidebar -->
+            <div class="lg:col-span-5 space-y-6">
+
+              <div class="bg-white p-8 rounded-3xl shadow-sm border border-stone-100 space-y-6">
+                <h2 class="text-2xl font-bold font-serif text-stone-900 border-b border-rose-100 pb-4">Informatie Olali Cakes</h2>
+
+                <div class="flex items-start space-x-4">
+                  <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                    📍
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-stone-800 text-sm">Locatie</h3>
+                    <p class="text-stone-600 text-sm mt-0.5">Gent, België (9000)</p>
+                    <p class="text-xs text-stone-400">Afhalen op afspraak & levering in Gent</p>
+                  </div>
+                </div>
+
+                <div class="flex items-start space-x-4">
+                  <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                    🕒
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-stone-800 text-sm">Openingstijden / Bestellingen</h3>
+                    <p class="text-stone-600 text-sm mt-0.5">Dinsdag - Zondag: 09:00 - 19:00 uur</p>
+                    <p class="text-xs text-rose-500 font-medium">Maandag: Gesloten voor bereidingen</p>
+                  </div>
+                </div>
+
+                <div class="flex items-start space-x-4">
+                  <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                    📱
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-stone-800 text-sm">Direct Contact</h3>
+                    <p class="text-stone-600 text-sm mt-0.5">+32 480 00 00 00</p>
+                    <p class="text-stone-600 text-sm">info&#64;olalicakes.be</p>
+                  </div>
+                </div>
+
+                <!-- Direct Social Links -->
+                <div class="pt-4 border-t border-stone-100 space-y-3">
+                  <h4 class="text-xs font-bold uppercase tracking-wider text-stone-400">Volg ons of chat direct</h4>
+                  <div class="grid grid-cols-2 gap-3">
+                    <a href="https://wa.me/32480000000" target="_blank" class="flex items-center justify-center gap-2 p-3 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-medium text-sm transition">
+                      💬 WhatsApp Chat
+                    </a>
+                    <a href="https://instagram.com" target="_blank" class="flex items-center justify-center gap-2 p-3 rounded-xl bg-pink-50 text-pink-700 hover:bg-pink-100 font-medium text-sm transition">
+                      📸 Instagram Olali
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Location Map Card -->
+              <div class="bg-stone-200 rounded-3xl h-60 relative overflow-hidden flex items-center justify-center border border-stone-300">
+                <img
+                  src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=800&q=80"
+                  alt="Gent Map"
+                  class="w-full h-full object-cover opacity-60"
+                />
+                <div class="absolute inset-0 bg-stone-900/30 flex items-center justify-center p-4 text-center">
+                  <div class="bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-lg max-w-xs">
+                    <span class="text-2xl block mb-1">🏰</span>
+                    <h4 class="font-bold text-stone-800">Gent - België</h4>
+                    <p class="text-xs text-stone-500 mt-1">Exact afhaaladres wordt bevestigd bij bestelling</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Contact Form -->
+            <div class="lg:col-span-7">
+              <div class="bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-stone-100">
+                <h2 class="text-2xl font-bold font-serif text-stone-900 mb-2">Bestel- & Aanvraagformulier</h2>
+                <p class="text-stone-500 text-sm mb-6">Vul de details in. Wij nemen zo snel mogelijk contact met je op voor een definitieve prijsafspraak.</p>
+
+                @if (formSubmitted()) {
+                  <div class="p-6 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 mb-6 text-center space-y-2">
+                    <span class="text-3xl block">🎉</span>
+                    <h3 class="font-bold text-lg">Bedankt! Je aanvraag is ontvangen.</h3>
+                    <p class="text-sm text-emerald-700">Wij bekijken de details en nemen binnen enkele uren contact met je op via telefoon of WhatsApp.</p>
+                    <button (click)="formSubmitted.set(false)" class="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold">
+                      Nieuwe aanvraag versturen
+                    </button>
+                  </div>
+                } @else {
+                  <form [formGroup]="contactForm" (ngSubmit)="submitForm()" class="space-y-5">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1.5">Volledige Naam *</label>
+                        <input
+                          type="text"
+                          formControlName="name"
+                          placeholder="Vul je naam in"
+                          class="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm transition"
+                        />
+                      </div>
+
+                      <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1.5">Telefoon / WhatsApp *</label>
+                        <input
+                          type="tel"
+                          formControlName="phone"
+                          placeholder="+32 4xx xx xx xx"
+                          class="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm transition"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1.5">E-mailadres</label>
+                        <input
+                          type="email"
+                          formControlName="email"
+                          placeholder="naam@voorbeeld.be"
+                          class="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm transition"
+                        />
+                      </div>
+
+                      <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1.5">Datum van Evenement / Afhalen *</label>
+                        <input
+                          type="date"
+                          formControlName="eventDate"
+                          class="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm transition"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label class="block text-sm font-medium text-stone-700 mb-1.5">Type Bestelling</label>
+                      <select
+                        formControlName="cakeType"
+                        class="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm transition bg-white">
+                        <option value="">Selecteer het type bestelling</option>
+                        <option value="custom-cake">Gepersonaliseerde Taart (Verjaardag / Bruiloft)</option>
+                        <option value="mini-sweets">Mini Sweets & Dessert buffet</option>
+                        <option value="inquiry">Algemene vraag / Prijsopgave</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label class="block text-sm font-medium text-stone-700 mb-1.5">Voorkeur Crème & Smaak</label>
+                      <select
+                        formControlName="preferredCream"
+                        class="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm transition bg-white">
+                        <option value="any">Nog te bespreken</option>
+                        <option value="pistachio">Pistache Crème (Pistachecrème)</option>
+                        <option value="chocolate">Belgische Chocolade Crème (Puur of Melk)</option>
+                        <option value="vanilla">Klassieke Vanille / Melk Crème</option>
+                        <option value="lotus">Speculoos / Lotus Crème</option>
+                        <option value="fruits">Verse Fruit Crème (Framboos/Mango)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label class="block text-sm font-medium text-stone-700 mb-1.5">Opmerkingen of Specifieke Wensen</label>
+                      <textarea
+                        formControlName="notes"
+                        rows="4"
+                        placeholder="Vermeld het aantal personen, gewenste kleuren, thema of eventuele allergieën (noten, lactose)..."
+                        class="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm transition"></textarea>
+                    </div>
+
+                    <button
+                      type="submit"
+                      [disabled]="contactForm.invalid"
+                      class="w-full py-3.5 bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white font-medium rounded-xl shadow-lg shadow-rose-200 transition">
+                      Aanvraag Versturen
+                    </button>
+                  </form>
+                }
+
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+      }
+    }
+  </main>
+
+  @if (selectedProduct(); as product) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm animate-fade-in">
+      <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-stone-100 flex flex-col max-h-[90vh]">
+
+        <!-- Modal Header -->
+        <div class="relative h-64 bg-stone-100">
+          <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover" />
+          <button
+            (click)="closeProductModal()"
+            class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/80 hover:bg-white text-stone-800 flex items-center justify-center shadow-md transition font-bold">
+            ✕
+          </button>
+          <span class="absolute bottom-4 left-4 bg-stone-900/80 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg">
+                {{ product.category === 'cakes' ? 'Taart op maat' : 'Mini Sweets' }}
+              </span>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6 overflow-y-auto space-y-6">
+
+          <div class="flex justify-between items-start border-b border-stone-100 pb-4">
+            <div>
+              <h2 class="text-2xl font-bold font-serif text-stone-900">{{ product.name }}</h2>
+              <p class="text-xs text-stone-400 mt-1">Bereidingstijd: {{ product.prepTime }}</p>
+            </div>
+            <div class="text-right bg-rose-50 px-4 py-2 rounded-2xl">
+              <span class="text-xs text-rose-500 block">Richtprijs</span>
+              <span class="text-xl font-bold text-rose-600">€{{ modalCalculatedPrice() }}</span>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="font-bold text-sm text-stone-800 mb-1">Beschrijving</h3>
+            <p class="text-stone-600 text-sm leading-relaxed">{{ product.longDescription }}</p>
+          </div>
+
+          <!-- Cream Selection -->
+          <div class="space-y-2">
+            <label class="block font-bold text-sm text-stone-800">
+              Kies je gewenste crèmesmaak: <span class="text-rose-500">*</span>
+            </label>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              @for (cream of product.creams; track cream) {
+                <button
+                  (click)="selectedCreamOption.set(cream)"
+                  class="p-2.5 rounded-xl border text-xs font-medium text-center transition flex items-center justify-center gap-1.5"
+                  [class.border-rose-600]="selectedCreamOption() === cream"
+                  [class.bg-rose-50]="selectedCreamOption() === cream"
+                  [class.text-rose-700]="selectedCreamOption() === cream"
+                  [class.border-stone-200]="selectedCreamOption() !== cream"
+                  [class.text-stone-600]="selectedCreamOption() !== cream">
+                  <span>✨</span> {{ cream }}
+                </button>
+              }
+            </div>
+          </div>
+
+          <!-- Size Selection -->
+          @if (product.sizes && product.sizes.length > 0) {
+            <div class="space-y-2">
+              <label class="block font-bold text-sm text-stone-800">Formaat / Aantal Personen:</label>
+              <div class="grid grid-cols-3 gap-2">
+                @for (size of product.sizes; track size; let idx = $index) {
+                  <button
+                    (click)="selectedSizeIndex.set(idx)"
+                    class="p-2.5 rounded-xl border text-xs font-medium text-center transition"
+                    [class.border-rose-600]="selectedSizeIndex() === idx"
+                    [class.bg-rose-50]="selectedSizeIndex() === idx"
+                    [class.text-rose-700]="selectedSizeIndex() === idx"
+                    [class.border-stone-200]="selectedSizeIndex() !== idx"
+                    [class.text-stone-600]="selectedSizeIndex() !== idx">
+                    {{ size }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+
+          <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-xs text-amber-900 space-y-1">
+            <p class="font-bold">💡 Informatie over prijzen:</p>
+            <p>De vermelde prijs is een indicatieve vanafprijs. De definitieve prijs kan variëren afhankelijk van specifieke decoratiewensen of vers fruit.</p>
+          </div>
+
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="p-4 bg-stone-50 border-t border-stone-100 flex gap-3">
+          <button
+            (click)="orderProductViaWhatsApp(product)"
+            class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm rounded-xl transition flex items-center justify-center gap-2">
+            <span>💬</span> Bestel via WhatsApp
+          </button>
+          <button
+            (click)="closeProductModal(); setActivePage('contact')"
+            class="py-3 px-5 bg-stone-200 hover:bg-stone-300 text-stone-800 font-medium text-sm rounded-xl transition">
+            Offerte Aanvragen
+          </button>
+        </div>
+
+      </div>
+    </div>
+  }
+
+  <footer class="bg-stone-900 text-stone-300 pt-12 pb-8 border-t border-stone-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <div class="space-y-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-full bg-rose-500 flex items-center justify-center text-white font-serif font-bold">
+              O
+            </div>
+            <span class="text-xl font-bold font-serif text-white">olali.cakes</span>
+          </div>
+          <p class="text-xs text-stone-400 leading-relaxed max-w-sm">
+            Gespecialiseerd in ambachtelijke taarten op maat en luxe mini desserts voor elk feest in Gent.
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <h4 class="text-white font-bold text-sm">Snelle Links</h4>
+          <ul class="text-xs space-y-2 text-stone-400">
+            <li><button (click)="setActivePage('home')" class="hover:text-rose-400">Startpagina</button></li>
+            <li><button (click)="setActivePage('products')" class="hover:text-rose-400">Producten & Assortiment</button></li>
+            <li><button (click)="setActivePage('contact')" class="hover:text-rose-400">Contact & Bestellen</button></li>
+          </ul>
+        </div>
+
+        <div class="space-y-2">
+          <h4 class="text-white font-bold text-sm">Gent - België</h4>
+          <p class="text-xs text-stone-400">Wij werken op bestelling om maximale versheid te garanderen.</p>
+          <p class="text-xs text-rose-400">9000 Gent, België</p>
+        </div>
+
+      </div>
+
+      <div class="pt-6 border-t border-stone-800 text-center text-xs text-stone-500">
+        Alle rechten voorbehouden © {{ currentYear }} <strong>olali.cakes</strong> • Gent
+      </div>
+    </div>
+  </footer>
+
+</div>
